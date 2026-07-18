@@ -10,3 +10,4 @@ from .user_profile import user_profile_bp
 
 __all__ = ['auth_bp', 'faq_bp', 'chatbot_bp', 'company_bp', 'pdf_bp', 'analytics_bp', 'import_bp', 'conversation_bp', 'user_profile_bp']
 
+from .widget import widget_bp
