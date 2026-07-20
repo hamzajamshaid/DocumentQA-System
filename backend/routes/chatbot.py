@@ -9,16 +9,16 @@ chatbot_bp = Blueprint('chatbot', __name__, url_prefix='/api/chatbot')
 
 # Greeting messages
 GREETINGS = {
-    'hello': "Hello! 👋 Welcome to MATW Charity support. How can I help you today?",
-    'hi': "Hi there! 👋 I'm here to answer your questions about MATW. What would you like to know?",
-    'hey': "Hey! 👋 Thanks for reaching out. What can I help you with?",
-    'good morning': "Good morning! ☀️ Welcome to MATW support. How can I assist?",
-    'good afternoon': "Good afternoon! 🌤️ How can MATW help you today?",
-    'good evening': "Good evening! 🌙 I'm here to help. What's your question?",
-    'thanks': "You're welcome! 😊 Is there anything else I can help with?",
-    'thank you': "Happy to help! 😊 Feel free to ask anything else about MATW.",
-    'bye': "Goodbye! 👋 Thanks for using MATW support. Have a great day!",
-    'help': "I'm here to help! 💡 You can ask me anything about MATW Charity, our programs, donations, and more. What would you like to know?"
+    'hello': "Hello! Welcome to our support. How can I help you today?",
+    'hi': "Hi there! I'm here to answer your questions. What would you like to know?",
+    'hey': "Hey! Thanks for reaching out. How can I assist?",
+    'good morning': "Good morning! Welcome to support. How can I assist?",
+    'good afternoon': "Good afternoon! How can I help you today?",
+    'good evening': "Good evening! I'm here to help. What's your question?",
+    'thanks': "You're welcome! Is there anything else I can help with?",
+    'thank you': "Happy to help! Feel free to ask anything else.",
+    'bye': "Goodbye! Thanks for using our support. Have a great day!",
+    'help': "I'm here to help! You can ask me anything about our services."
 }
 
 def fuzzy_match(text, keywords, threshold=0.5):
@@ -28,11 +28,8 @@ def fuzzy_match(text, keywords, threshold=0.5):
     best_score = 0
     
     for keyword in keywords:
-        # Check if keyword is substring (exact match)
         if keyword in text_lower:
             return keyword
-        
-        # Fuzzy match using SequenceMatcher
         score = SequenceMatcher(None, text_lower, keyword).ratio()
         if score > best_score:
             best_score = score
@@ -43,9 +40,8 @@ def fuzzy_match(text, keywords, threshold=0.5):
     return None
 
 def is_greeting(question):
-    """Check if question is a greeting with fuzzy matching"""
-    matched = fuzzy_match(question, GREETINGS.keys(), threshold=0.5)
-    return matched is not None
+    """Check if question is a greeting"""
+    return fuzzy_match(question, GREETINGS.keys(), threshold=0.5) is not None
 
 def get_greeting_response(question):
     """Get appropriate greeting response"""
@@ -95,7 +91,7 @@ def ask_chatbot():
             ip_address=request.remote_addr
         )
         db.session.add(user_profile)
-        db.session.commit()
+        db.session.flush()
     
     # Save conversation
     conversation = Conversation(
